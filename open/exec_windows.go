@@ -22,7 +22,7 @@ func cleaninput(input string) string {
 
 func open(input string) *exec.Cmd {
 	cmd := exec.Command(runDll32, cmd, input)
-	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	//cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	return cmd
 }
 
