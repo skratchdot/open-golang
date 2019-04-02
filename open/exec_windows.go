@@ -7,7 +7,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
-	"syscall"
+	// "syscall"
 )
 
 var (
