@@ -37,8 +37,14 @@ func TestStart(t *testing.T) {
 func TestRunWith(t *testing.T) {
 	// shouldn't error
 	input := "https://google.com/"
+	err := RunWith(input, "")
+	if err != nil {
+		t.Errorf("open.RunWith(\"%s\", \"\") threw an error: %s", input, err)
+	}
+
+	// shouldn't error
 	app := "firefox"
-	err := RunWith(input, app)
+	err = RunWith(input, app)
 	if err != nil {
 		t.Errorf("open.RunWith(\"%s\", \"%s\") threw an error: %s", input, app, err)
 	}
@@ -54,8 +60,14 @@ func TestRunWith(t *testing.T) {
 func TestStartWith(t *testing.T) {
 	// shouldn't error
 	input := "https://google.com/"
+	err := StartWith(input, "")
+	if err != nil {
+		t.Errorf("open.StartWith(\"%s\", \"\") threw an error: %s", input, err)
+	}
+
+	// shouldn't error
 	app := "firefox"
-	err := StartWith(input, app)
+	err = StartWith(input, app)
 	if err != nil {
 		t.Errorf("open.StartWith(\"%s\", \"%s\") threw an error: %s", input, app, err)
 	}

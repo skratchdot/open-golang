@@ -38,6 +38,9 @@ func Start(input string) error {
 	Wait for the open command to complete.
 */
 func RunWith(input string, appName string) error {
+	if len(appName) == 0 {
+		return Run(input)
+	}
 	return openWith(input, appName).Run()
 }
 
@@ -46,5 +49,8 @@ func RunWith(input string, appName string) error {
 	Don't wait for the open command to complete.
 */
 func StartWith(input string, appName string) error {
+	if len(appName) == 0 {
+		return Start(input)
+	}
 	return openWith(input, appName).Start()
 }
