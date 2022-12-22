@@ -21,7 +21,7 @@ func cleaninput(input string) string {
 }
 
 func open(input string) *exec.Cmd {
-	cmd := exec.Command("start", input, "/wait")
+	cmd := exec.Command("start", "/wait", input)
 	//cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	return cmd
 }
