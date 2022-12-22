@@ -3,9 +3,7 @@
 package open
 
 import (
-	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 	// "syscall"
 )
