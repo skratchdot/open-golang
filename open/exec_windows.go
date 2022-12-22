@@ -12,7 +12,7 @@ import (
 
 var (
 	cmd      = "url.dll,FileProtocolHandler"
-	runDll32 = filepath.Join(os.Getenv("SYSTEMROOT"), "System32", "rundll32.exe")
+	// start = filepath.Join(os.Getenv("SYSTEMROOT"), "System32", "start.exe")
 )
 
 func cleaninput(input string) string {
@@ -21,7 +21,7 @@ func cleaninput(input string) string {
 }
 
 func open(input string) *exec.Cmd {
-	cmd := exec.Command("start", "/wait", input)
+	cmd := exec.Command("cmd", "/C", "start", "/wait", cleaninput(input))
 	//cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 	return cmd
 }
