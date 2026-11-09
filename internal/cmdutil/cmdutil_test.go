@@ -2,10 +2,7 @@ package cmdutil
 
 import (
 	"context"
-	"os"
 	"os/exec"
-	"path"
-	"path/filepath"
 	"testing"
 
 	"github.com/skratchdot/open-golang/opts"
@@ -22,15 +19,12 @@ type TC struct {
 }
 
 func TestCmdWindows(t *testing.T) {
-	testhelperWindows(t)
-	windowsRunDll32 := filepath.Join(string([]rune{'N', ':', os.PathSeparator, os.PathSeparator}), "Windows", "System32", "rundll32.exe")
-
 	testcases := []TC{
 		{
 			name:        "url",
 			inputTarget: "https://www.github.com",
 			inputOpts:   nil,
-			expectedCmd: exec.CommandContext(context.TODO(), windowsRunDll32, windowsRunDll32Arg, "https://www.github.com"),
+			expectedCmd: exec.CommandContext(context.TODO(), "cmd", "/C", "start", "https://www.github.com"),
 		},
 		{
 			name:        "url with app",
@@ -46,7 +40,7 @@ func TestCmdWindows(t *testing.T) {
 			inputOpts: []opts.Option{
 				opts.Wait(),
 			},
-			expectedCmd: exec.CommandContext(context.TODO(), windowsRunDll32, windowsRunDll32Arg, "https://www.github.com"),
+			expectedCmd: exec.CommandContext(context.TODO(), "cmd", "/C", "start", "/wait", "https://www.github.com"),
 		},
 		{
 			name:        "url with app and wait",
@@ -55,7 +49,7 @@ func TestCmdWindows(t *testing.T) {
 				opts.WithApp("chrome"),
 				opts.Wait(),
 			},
-			expectedCmd: exec.CommandContext(context.TODO(), "cmd", "/C", "start", "", "chrome", "https://www.github.com"),
+			expectedCmd: exec.CommandContext(context.TODO(), "cmd", "/C", "start", "/wait", "", "chrome", "https://www.github.com"),
 		},
 	}
 
@@ -154,18 +148,4 @@ func TestCmdUnix(t *testing.T) {
 			assert.Equal(t, tc.expectedCmd.Args, actualCmd.Args)
 		})
 	}
-}
-
-func testhelperWindows(t *testing.T) {
-	t.Helper()
-	originalRoot, hasRoot := os.LookupEnv("SYSTEMROOT")
-	_ = os.Setenv("SYSTEMROOT", path.Join(`N:`, "Windows"))
-
-	t.Cleanup(func() {
-		if !hasRoot {
-			_ = os.Unsetenv("SYSTEMROOT")
-		} else {
-			_ = os.Setenv("SYSTEMROOT", originalRoot)
-		}
-	})
 }

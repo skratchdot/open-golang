@@ -2,45 +2,30 @@ package cmdutil
 
 import (
 	"context"
-	"os"
 	"os/exec"
-	"path/filepath"
 	"strings"
 
 	"github.com/skratchdot/open-golang/opts"
 )
 
-const (
-	windowsRunDll32Arg = "url.dll,FileProtocolHandler"
-)
-
 // CmdWindows returns the configuration and command used to open target on
 // Windows, optionally using an application from options.
 func CmdWindows(ctx context.Context, target string, options ...opts.Option) (opts.Config, *exec.Cmd) {
-	windowsRunDll32 := getWindowsRunDll32()
 	cfg := opts.Init(
-		opts.ConfigBuilder{}.AppName(windowsRunDll32),
+		opts.ConfigBuilder{},
 		options...,
 	)
 
 	args := make([]string, 0)
-	appName := cfg.AppName()
-	if appName == windowsRunDll32 {
-		// If we're using the runDll32 executable, we need to follow up
-		// with the file protocol handler.
-		args = append(args, windowsRunDll32Arg)
-	} else if appName != "" {
-		// If we're invoking a specific application, we need
-		// to change the strategy to invoke the app via cmd
-		args = append(args, "/C", "start", "", appName)
-		appName = "cmd"
+	args = append(args, "/C", "start")
+	if cfg.Wait() {
+		args = append(args, "/wait")
+	}
+	if appName := cfg.AppName(); appName != "" {
+		args = append(args, "", appName)
 	}
 	args = append(args, cleanWindowsInput(target))
-	return cfg, exec.CommandContext(ctx, appName, args...)
-}
-
-func getWindowsRunDll32() string {
-	return filepath.Join(os.Getenv("SYSTEMROOT"), "System32", "rundll32.exe")
+	return cfg, exec.CommandContext(ctx, "cmd", args...)
 }
 
 func cleanWindowsInput(input string) string {
