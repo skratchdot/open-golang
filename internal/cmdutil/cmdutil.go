@@ -42,6 +42,9 @@ func CmdDarwin(ctx context.Context, target string, options ...opts.Option) (opts
 	)
 
 	args := make([]string, 0)
+	if cfg.Wait() {
+		args = append(args, "-W")
+	}
 	if appName := cfg.AppName(); appName != "" {
 		args = append(args, "-a", appName)
 	}

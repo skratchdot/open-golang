@@ -84,7 +84,7 @@ func TestCmdDarwin(t *testing.T) {
 			inputOpts: []opts.Option{
 				opts.Wait(),
 			},
-			expectedCmd: exec.CommandContext(context.TODO(), "open", "https://www.github.com"),
+			expectedCmd: exec.CommandContext(context.TODO(), "open", "-W", "https://www.github.com"),
 		},
 		{
 			name:        "url with app and wait",
@@ -93,7 +93,7 @@ func TestCmdDarwin(t *testing.T) {
 				opts.WithApp("chrome"),
 				opts.Wait(),
 			},
-			expectedCmd: exec.CommandContext(context.TODO(), "open", "-a", "chrome", "https://www.github.com"),
+			expectedCmd: exec.CommandContext(context.TODO(), "open", "-W", "-a", "chrome", "https://www.github.com"),
 		},
 	}
 
