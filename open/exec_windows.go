@@ -3,31 +3,13 @@
 package open
 
 import (
-	"os"
+	"context"
 	"os/exec"
-	"path/filepath"
-	"strings"
-	// "syscall"
+
+	"github.com/skratchdot/open-golang/internal/cmdutil"
+	"github.com/skratchdot/open-golang/opts"
 )
 
-var (
-	cmd      = "url.dll,FileProtocolHandler"
-	runDll32 = filepath.Join(os.Getenv("SYSTEMROOT"), "System32", "rundll32.exe")
-)
-
-func cleaninput(input string) string {
-	r := strings.NewReplacer("&", "^&")
-	return r.Replace(input)
-}
-
-func open(input string) *exec.Cmd {
-	cmd := exec.Command(runDll32, cmd, input)
-	//cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	return cmd
-}
-
-func openWith(input string, appName string) *exec.Cmd {
-	cmd := exec.Command("cmd", "/C", "start", "", appName, cleaninput(input))
-	//cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
-	return cmd
+func createCmd(ctx context.Context, target string, options ...opts.Option) (opts.Config, *exec.Cmd) {
+	return cmdutil.CmdWindows(ctx, target, options...)
 }
