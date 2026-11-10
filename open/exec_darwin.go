@@ -1,15 +1,15 @@
-// +build darwin
+//go:build darwin
 
 package open
 
 import (
+	"context"
 	"os/exec"
+
+	"github.com/skratchdot/open-golang/internal/cmdutil"
+	"github.com/skratchdot/open-golang/opts"
 )
 
-func open(input string) *exec.Cmd {
-	return exec.Command("open", input)
-}
-
-func openWith(input string, appName string) *exec.Cmd {
-	return exec.Command("open", "-a", appName, input)
+func createCmd(ctx context.Context, target string, options ...opts.Option) (opts.Config, *exec.Cmd) {
+	return cmdutil.CmdDarwin(ctx, target, options...)
 }
